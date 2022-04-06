@@ -1,17 +1,18 @@
-package main
+package common
 
 import (
 	"bufio"
-	"fmt"
 	"log"
 	"os"
 )
 
-func main() {
-	file, error := os.Open("input1.txt")
+func ReadInput(inputFile string) []string {
+	file, error := os.Open(inputFile)
+	
 	if error != nil {
 		log.Fatal("Failed to open input!")
 	}
+
 	defer func() {
 		if error := file.Close(); error != nil {
 			log.Fatal("Error closing file!")
@@ -19,10 +20,12 @@ func main() {
 	}()
 
 	scanner := bufio.NewScanner(file)
-
 	scanner.Split(bufio.ScanLines)
 
+	var lines []string
 	for scanner.Scan() {
-		fmt.Println(scanner.Text())
+		lines = append(lines, scanner.Text())
 	}
+
+	return lines
 }
