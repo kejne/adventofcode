@@ -3,8 +3,6 @@ package main
 import (
 	"fmt"
 	"github.com/kejne/adventofcode/2022/common"
-	"os"
-	"strconv"
 )
 
 func calculateIncrements(lines []string) int {
@@ -13,11 +11,7 @@ func calculateIncrements(lines []string) int {
 	noOfIncrements := 0
 
 	for _, line := range lines {
-		depth, err := strconv.Atoi(line)
-		if err != nil {
-			fmt.Println("Input can only be numbers")
-			os.Exit(1)
-		}
+		depth := common.GetNumber(line)
 
 		if depth > prevDepth {
 			noOfIncrements++
@@ -27,10 +21,55 @@ func calculateIncrements(lines []string) int {
 	return noOfIncrements
 }
 
+func calculateSlidingWindows(lines []string) []int {
+	type window struct {
+		values []int
+		active bool
+	}
+
+	windows := make([]*window, 3)
+	for _,window := range windows {
+		window.values = make([]int, 0)
+		window.active = false
+	}
+
+	windowSums := make([]int, 0)
+
+	for _, line := range lines {
+		depth := common.GetNumber(line)
+		valueAdded := false
+		for _, window := range windows {
+			if !window.active {
+				window.values = append(window.values, depth)
+				window.active = true
+			} else if !valueAdded {
+				window.values = append(window.values, depth)
+				valueAdded = true
+			}
+			
+			
+			if len(window.values) == 3 {
+				var windowSum int
+				for _, v := range window.values {
+					windowSum += v
+				}
+				windowSums = append(windowSums, windowSum)
+				window.values = make([]int, 0)
+				window.active = false
+			}
+		}
+
+	}
+	return windowSums
+}
+
 func main() {
 
 	lines := common.ReadInput("input1.txt")
 
 	noOfIncrements := calculateIncrements(lines)
 	fmt.Printf("Amount of increments: %d ", noOfIncrements)
+
+	windowSums := calculateSlidingWindows(lines)
+	fmt.Printf("WindowSums: %v", windowSums)
 }

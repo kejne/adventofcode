@@ -2,8 +2,10 @@ package common
 
 import (
 	"bufio"
+	"fmt"
 	"log"
 	"os"
+	"strconv"
 )
 
 func ReadInput(inputFile string) []string {
@@ -29,3 +31,13 @@ func ReadInput(inputFile string) []string {
 
 	return lines
 }
+
+func GetNumber(line string) int {
+	depth, err := strconv.Atoi(line)
+	if err != nil {
+		fmt.Println("Input can only be numbers")
+		os.Exit(1)
+	}
+	return depth
+}
+
