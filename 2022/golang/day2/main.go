@@ -25,7 +25,32 @@ func main() {
 type strategy string
 
 func (s strategy) evalPoints() int {
-	return s.basePoint()
+	return s.basePoint() + s.battle()
+}
+
+func (s strategy) battle() int {
+	wins := map[string]string{
+		"X": "C",
+		"Y": "A",
+		"Z": "B",
+	}
+	draw := map[string]string{
+		"X": "A",
+		"Y": "B",
+		"Z": "C",
+	}
+
+	points := 0
+	for spr, defeats := range wins {
+		if strings.Contains(string(s), spr) {
+			if strings.Contains(string(s), defeats) {
+				points = 6
+			} else if strings.Contains(string(s), draw[spr]) {
+				points = 3
+			}
+		}
+	}
+	return points
 }
 
 func (s strategy) basePoint() int {
