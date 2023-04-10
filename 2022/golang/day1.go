@@ -2,21 +2,24 @@ package main
 
 import (
 	"bufio"
-	"fmt"
-	"os"
 	"sort"
 	"strconv"
 )
 
-func main() {
-	file, _ := os.Open("input.txt")
-	defer file.Close()
+type Day1Calculator struct {
+	input *bufio.Scanner
+}
 
-	scanner := bufio.NewScanner(file)
+func NewDay1Calculator(input *bufio.Scanner) AdventCalculator {
+	return Day1Calculator{
+		input: input,
+	}
+}
 
-	elfCalorie := groupCalCarried(scanner)
-
-	fmt.Println(getTopCalories(3, elfCalorie))
+func (c Day1Calculator) GetResult() string {
+	calories := groupCalCarried(c.input)
+	topCals := getTopCalories(3, calories)
+	return strconv.Itoa(topCals)
 }
 
 func groupCalCarried(scanner *bufio.Scanner) []int {

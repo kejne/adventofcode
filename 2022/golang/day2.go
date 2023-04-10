@@ -2,27 +2,29 @@ package main
 
 import (
 	"bufio"
-	"fmt"
-	"os"
+	"strconv"
 	"strings"
 )
 
-
-func main() {
-
-	file, _ := os.Open("input.txt")
-	defer file.Close()
-
-	scanner := bufio.NewScanner(file)
-	totPoints := 0
-	for scanner.Scan() {
-		strategy := Strategy(scanner.Text())
-		totPoints += strategy.evalPoints(day2)
-	}
-	fmt.Println(totPoints)
+type Day2Calculator struct {
+	input *bufio.Scanner
 }
 
-type Strategy string 
+func NewDay2Calculator(input *bufio.Scanner) AdventCalculator {
+	return Day2Calculator{
+		input: input,
+	}
+}
+func (c Day2Calculator) GetResult() string {
+	totPoints := 0
+	for c.input.Scan() {
+		strategy := Strategy(c.input.Text())
+		totPoints += strategy.evalPoints(day2)
+	}
+	return strconv.Itoa(totPoints)
+}
+
+type Strategy string
 
 type Day int
 
@@ -40,7 +42,7 @@ const (
 )
 
 func (m Move) Points() int {
-	points := []int{1,2,3}
+	points := []int{1, 2, 3}
 	return points[int(m)]
 }
 
@@ -67,7 +69,7 @@ func (s Strategy) evalMove() Move {
 		"C Z": rock,
 	}
 
-	for strategy,move := range moves {
+	for strategy, move := range moves {
 		if strings.Contains(string(s), strategy) {
 			return move
 		}
@@ -117,7 +119,6 @@ func (s Strategy) OutcomePoint() int {
 
 	return 0
 }
-
 
 func (s Strategy) basePoint() int {
 	pointMap := map[string]int{
