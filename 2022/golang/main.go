@@ -27,6 +27,8 @@ func getCalculator(file *os.File, day int) AdventCalculator {
 		return NewDay1Calculator(scanner)
 	case 2:
 		return NewDay2Calculator(scanner)
+	case 3:
+		return NewDay3Calculator(scanner)
 	default:
 		return NewDay1Calculator(scanner)
 	}
